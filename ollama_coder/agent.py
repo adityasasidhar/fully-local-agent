@@ -363,6 +363,21 @@ class Agent:
                 
                 console.print(f"[blue]Executing tool:[/blue] {function_name}")
                 
+                # Print arguments for better visibility
+                if "path" in arguments:
+                    console.print(f"  [dim]Path:[/dim] [cyan]{arguments['path']}[/cyan]")
+                if "command" in arguments:
+                    console.print(f"  [dim]Command:[/dim] [yellow]{arguments['command']}[/yellow]")
+                if "package_name" in arguments:
+                    console.print(f"  [dim]Package:[/dim] [green]{arguments['package_name']}[/green]")
+                if "pattern" in arguments:
+                    console.print(f"  [dim]Pattern:[/dim] [magenta]{arguments['pattern']}[/magenta]")
+                
+                # For other interesting args
+                other_args = {k: v for k, v in arguments.items() if k not in ["path", "command", "package_name", "pattern", "content", "old_text", "new_text"]}
+                if other_args:
+                    console.print(f"  [dim]Args:[/dim] {other_args}")
+                
                 if function_name in self.tools:
                     result = self.tools[function_name](**arguments)
                     self.messages.append({
