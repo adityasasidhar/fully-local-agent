@@ -55,17 +55,30 @@ Specify a different model:
 .venv/bin/python -m ollama_coder.main start --model llama3
 ```
 
-## Workflow
+## 🧠 Workflow & Planning
 
-### Planning Mode
-For complex requests (e.g., "Build a Flask app"), the assistant will:
-1. **Analyze** your request.
-2. **Propose a Plan** with step-by-step actions.
-3. **Wait for Approval** (type "yes" or "proceed").
-4. **Execute** the plan autonomously.
+### 1. Planning Mode (Complex Tasks)
+For tasks that require multiple steps (like building a website or refactoring a module), the assistant follows a strict **Plan-Execute** workflow:
 
-### Direct Mode
-For simple requests (e.g., "List files", "Read main.py"), the assistant executes immediately.
+1.  **Analysis**: The agent analyzes your request to understand the scope.
+2.  **Plan Generation**: It creates a detailed, step-by-step plan outlining exactly which files will be created or modified.
+3.  **User Review**: The plan is presented to you. You can approve it (type `yes`, `proceed`) or provide feedback to refine it.
+4.  **Execution**: Only after approval does the agent start creating files or running commands.
+
+**Example Interaction:**
+> **You**: "Create a personal portfolio website."
+> **Agent**: "I'll build a portfolio with the following steps:
+> 1. Create `index.html` with sections for About, Projects, and Contact.
+> 2. Create `style.css` with a responsive grid layout.
+> 3. Create `script.js` for smooth scrolling navigation.
+> Does this plan look good?"
+> **You**: "Yes, but add a dark mode toggle."
+> **Agent**: "Understood. I've updated the plan to include dark mode styles and JS logic. Proceeding?"
+
+### 2. Direct Mode (Simple Tasks)
+For quick actions, the agent acts immediately without unnecessary dialogue:
+> **You**: "Read the contents of main.py"
+> **Agent**: [Reads and displays file content immediately]
 
 ## Available Tools
 
