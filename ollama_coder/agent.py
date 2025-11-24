@@ -455,6 +455,17 @@ class Agent:
                 function_name = tool_call["function"]["name"]
                 arguments = tool_call["function"]["arguments"]
                 
+                # Fix common LLM hallucination where arguments are wrapped in an 'arguments' key
+                if isinstance(arguments, dict) and "arguments" in arguments and isinstance(arguments["arguments"], dict):
+                    # Unwrap the nested arguments
+                    if "code" in arguments["arguments"] and function_name == "python_repl":
+                         arguments = arguments["arguments"]
+                    # General case for other tools if needed, but be careful not to break valid args
+                    elif len(arguments) <= 2 and "function_name" in arguments: 
+                         # If it looks like {arguments: {...}, function_name: ...} pattern
+                         arguments = arguments["arguments"]
+
+                
                 # Visual feedback for tool execution
                 console.print(Panel(
                     Group(
