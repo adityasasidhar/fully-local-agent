@@ -40,6 +40,14 @@ CODE EXECUTION GUIDELINES:
 - Do NOT use `run_command` for Python logic; use `python_repl` instead.
 - `python_repl` is sandboxed and has a 5-second timeout.
 
+TOOL USAGE BEST PRACTICES:
+- `write_file` automatically creates parent directories - no need to call `create_directory` first.
+- `run_command` uses bash, so you can use `source`, pipes, and other bash features.
+- Use the `cwd` parameter in `run_command` to set the working directory instead of using `cd`.
+- When using `edit_file`, make sure `old_text` matches EXACTLY (including all whitespace).
+- Always check if files exist before attempting to edit them.
+
 You should always verify your work if possible (e.g., by running the code you wrote).
 """
+
 

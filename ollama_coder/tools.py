@@ -24,23 +24,52 @@ def read_file(path: str) -> str:
 
 
 def write_file(path: str, content: str) -> str:
-    """Write content to a file."""
+    """
+    Write content to a file, creating parent directories if needed.
+    
+    Args:
+        path: Path to the file
+        content: Content to write
+    """
     try:
+        # Create parent directories if they don't exist
+        parent_dir = os.path.dirname(path)
+        if parent_dir and not os.path.exists(parent_dir):
+            os.makedirs(parent_dir, exist_ok=True)
+        
         with open(path, "w") as f:
             f.write(content)
         return f"Successfully wrote to {path}"
+    except PermissionError:
+        return f"Error: Permission denied writing to {path}"
     except Exception as e:
         return f"Error writing file: {e}"
 
 
+
 def edit_file(path: str, old_text: str, new_text: str) -> str:
-    """Replace old_text with new_text in a file."""
+    """
+    Replace old_text with new_text in a file.
+    
+    Args:
+        path: Path to the file to edit
+        old_text: Text to find and replace
+        new_text: Replacement text
+    """
     try:
+        # Check if file exists
+        if not os.path.exists(path):
+            return f"Error: File '{path}' does not exist"
+        
+        # Check if file is readable
+        if not os.access(path, os.R_OK):
+            return f"Error: No read permission for '{path}'"
+        
         with open(path, "r") as f:
             content = f.read()
 
         if old_text not in content:
-            return "Error: old_text not found in file."
+            return f"Error: old_text not found in file. Make sure the text matches exactly."
 
         new_content = content.replace(old_text, new_text)
 
@@ -48,22 +77,50 @@ def edit_file(path: str, old_text: str, new_text: str) -> str:
             f.write(new_content)
 
         return f"Successfully edited {path}"
+    except PermissionError:
+        return f"Error: Permission denied editing '{path}'"
     except Exception as e:
         return f"Error editing file: {e}"
 
 
-def run_command(command: str) -> str:
-    """Run a shell command."""
+def run_command(command: str, cwd: str = None) -> str:
+    """
+    Run a shell command using bash.
+    
+    Args:
+        command: The shell command to execute
+        cwd: Optional working directory (defaults to current directory)
+    """
     try:
+        # Validate working directory if provided
+        if cwd and not os.path.isdir(cwd):
+            return f"Error: Working directory '{cwd}' does not exist"
+        
         result = subprocess.run(
-            command, shell=True, capture_output=True, text=True, timeout=60
+            command,
+            shell=True,
+            executable='/bin/bash',  # Use bash instead of sh
+            capture_output=True,
+            text=True,
+            timeout=60,
+            cwd=cwd
         )
-        output = result.stdout
+        
+        output = ""
+        if result.stdout:
+            output += result.stdout
         if result.stderr:
             output += f"\nStderr: {result.stderr}"
+        
+        if not output.strip():
+            return f"Command completed with exit code {result.returncode} (no output)"
+        
         return output
+    except subprocess.TimeoutExpired:
+        return "Error: Command timed out after 60 seconds"
     except Exception as e:
         return f"Error running command: {e}"
+
 
 
 # Search and Analysis Tools

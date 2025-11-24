@@ -81,11 +81,11 @@ class Agent:
                 "type": "function",
                 "function": {
                     "name": "write_file",
-                    "description": "Write content to a file",
+                    "description": "Write content to a file. Creates parent directories automatically if they don't exist.",
                     "parameters": {
                         "type": "object",
                         "properties": {
-                            "path": {"type": "string", "description": "The file path"},
+                            "path": {"type": "string", "description": "The file path (can be nested, e.g., 'dir/subdir/file.txt')"},
                             "content": {"type": "string", "description": "The content to write"}
                         },
                         "required": ["path", "content"]
@@ -96,12 +96,12 @@ class Agent:
                 "type": "function",
                 "function": {
                     "name": "edit_file",
-                    "description": "Replace text in a file",
+                    "description": "Replace text in a file. The old_text must match exactly (including whitespace).",
                     "parameters": {
                         "type": "object",
                         "properties": {
                             "path": {"type": "string", "description": "The file path"},
-                            "old_text": {"type": "string", "description": "The text to replace"},
+                            "old_text": {"type": "string", "description": "The exact text to replace (must match precisely)"},
                             "new_text": {"type": "string", "description": "The new text"}
                         },
                         "required": ["path", "old_text", "new_text"]
@@ -112,11 +112,12 @@ class Agent:
                 "type": "function",
                 "function": {
                     "name": "run_command",
-                    "description": "Run a shell command",
+                    "description": "Run a shell command using bash. Supports advanced features like 'source', pipes, and redirects.",
                     "parameters": {
                         "type": "object",
                         "properties": {
-                            "command": {"type": "string", "description": "The command to run"}
+                            "command": {"type": "string", "description": "The bash command to run"},
+                            "cwd": {"type": "string", "description": "Optional working directory for the command"}
                         },
                         "required": ["command"]
                     }
