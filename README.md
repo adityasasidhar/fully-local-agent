@@ -52,19 +52,17 @@ Space is a powerful, fully local CLI coding assistant powered by Ollama. It is d
 Start the assistant using the CLI entry point:
 
 ```bash
-python -m ollama_coder.main start
+python -m space.main start
 ```
 
 ### Command Line Options
 
 -   `--model`: Specify the Ollama model to use (default: `qwen3:4b`).
     ```bash
-    python -m ollama_coder.main start --model llama3
+    python -m space.main start --model llama3
     ```
 
 ### Special Slash Commands
-
-Inside the chat interface, you can use these commands:
 
 -   `/models`: List all available Ollama models on your system.
 -   `/model <name>`: Switch to a different model instantly.
